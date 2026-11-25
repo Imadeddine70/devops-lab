@@ -6,7 +6,17 @@ ENV PATH="/opt/venv/bin:$PATH"
 COPY app/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Étape 2 : image finale, minimale, sans outils de build
+# Étape de test : lint et tests unitaires (non incluse dans l'image finale)
+FROM builder AS test
+WORKDIR /build
+COPY app/requirements.txt app/requirements.txt
+COPY requirements-dev.txt setup.cfg ./
+RUN pip install --no-cache-dir -r requirements-dev.txt
+COPY app app
+COPY tests tests
+RUN flake8 app tests && python -m pytest -q
+
+# Étape 3 : image finale, minimale, sans outils de build
 FROM python:3.12-slim
 ENV PATH="/opt/venv/bin:$PATH" \
     PYTHONDONTWRITEBYTECODE=1 \

@@ -9,7 +9,7 @@ L'application est volontairement minimale : l'infrastructure est le sujet.
 | Étape | Contenu | État |
 |---|---|---|
 | 1 | Docker : image multi-stage, non-root, compose durci | fait |
-| 2 | Jenkins : pipeline CI (lint, tests, build, scan) | à venir |
+| 2 | Jenkins : pipeline CI (lint, tests, build, scan) | en cours |
 | 3 | Ansible : provisionnement reproductible | à venir |
 | 4 | Kubernetes (kind) : Deployment, Service, probes, HPA | à venir |
 | 5 | Déploiement continu Jenkins vers Kubernetes | à venir |
