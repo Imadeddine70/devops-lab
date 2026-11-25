@@ -1,0 +1,25 @@
+services:
+  control:
+    build: .
+    container_name: ansible-control
+    # Génère une paire de clés SSH au premier démarrage, puis reste actif
+    command: >
+      sh -c "[ -f /keys/id_ed25519 ] || ssh-keygen -t ed25519 -N '' -q -f /keys/id_ed25519;
+             sleep infinity"
+    volumes:
+      - ..:/project:ro
+      - keys:/keys
+    depends_on:
+      - node1
+
+  node1:
+    build: ./node
+    container_name: ansible-node1
+    hostname: node1
+    ports:
+      - "8083:8080"
+    volumes:
+      - keys:/keys:ro
+
+volumes:
+  keys:

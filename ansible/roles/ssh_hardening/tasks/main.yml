@@ -1,0 +1,30 @@
+---
+- name: Déposer la configuration SSH durcie
+  ansible.builtin.template:
+    src: 10-hardening.conf.j2
+    dest: /etc/ssh/sshd_config.d/10-hardening.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Recharger sshd
+
+- name: Vérifier la syntaxe de la configuration sshd
+  ansible.builtin.command: /usr/sbin/sshd -t
+  changed_when: false
+
+- name: Appliquer les handlers maintenant
+  ansible.builtin.meta: flush_handlers
+
+- name: Lire la configuration effective de sshd
+  ansible.builtin.command: /usr/sbin/sshd -T
+  register: sshd_effective
+  changed_when: false
+
+- name: Contrôler que le durcissement est bien actif
+  ansible.builtin.assert:
+    that:
+      - "'permitrootlogin no' in sshd_effective.stdout"
+      - "'passwordauthentication no' in sshd_effective.stdout"
+      - "'maxauthtries 3' in sshd_effective.stdout"
+    fail_msg: "La configuration SSH effective n'est pas celle attendue"
+    success_msg: "SSH durci : root interdit, mot de passe interdit"

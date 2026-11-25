@@ -1,0 +1,5 @@
+---
+- name: Recharger sshd
+  # SIGHUP au processus maître uniquement (les sessions en cours ne sont pas coupées)
+  ansible.builtin.shell: kill -HUP "$(cat /run/sshd.pid)"
+  changed_when: true

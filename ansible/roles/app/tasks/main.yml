@@ -1,0 +1,47 @@
+---
+- name: Créer les répertoires de l'application
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    owner: appsvc
+    group: appsvc
+    mode: "0755"
+  loop:
+    - "{{ app_dir }}"
+    - "{{ app_dir }}/run"
+
+- name: Copier le code de l'application
+  ansible.builtin.copy:
+    src: "{{ app_source }}/{{ item }}"
+    dest: "{{ app_dir }}/{{ item }}"
+    owner: appsvc
+    group: appsvc
+    mode: "0644"
+  loop:
+    - main.py
+    - requirements.txt
+  notify: Arrêter l'application
+
+- name: Installer les dépendances dans un environnement virtuel
+  ansible.builtin.pip:
+    requirements: "{{ app_dir }}/requirements.txt"
+    virtualenv: "{{ app_dir }}/venv"
+    virtualenv_command: python3 -m venv
+  become_user: appsvc
+
+- name: Arrêter l'ancienne version si le code a changé
+  ansible.builtin.meta: flush_handlers
+
+- name: Démarrer gunicorn (sans effet si déjà lancé)
+  ansible.builtin.command:
+    cmd: >
+      {{ app_dir }}/venv/bin/gunicorn --daemon
+      --pid {{ app_dir }}/run/gunicorn.pid
+      --bind 0.0.0.0:{{ app_port }}
+      --workers 1 --threads 4
+      --chdir {{ app_dir }} main:app
+    creates: "{{ app_dir }}/run/gunicorn.pid"
+  environment:
+    APP_ENV: "{{ app_env }}"
+    APP_VERSION: "{{ app_version }}"
+  become_user: appsvc

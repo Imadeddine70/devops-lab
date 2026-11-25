@@ -1,0 +1,22 @@
+---
+- name: Configurer le serveur node1
+  hosts: web
+  roles:
+    - common
+    - ssh_hardening
+    - app
+
+  post_tasks:
+    - name: Vérifier que le service répond sur /health
+      ansible.builtin.uri:
+        url: http://127.0.0.1:8080/health
+        return_content: true
+      register: health
+      retries: 10
+      delay: 2
+      until: health.status == 200
+      become: false
+
+    - name: Afficher la réponse
+      ansible.builtin.debug:
+        msg: "{{ health.json }}"

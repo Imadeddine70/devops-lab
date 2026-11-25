@@ -1,0 +1,8 @@
+---
+- name: Arrêter l'application
+  ansible.builtin.shell: |
+    if [ -f {{ app_dir }}/run/gunicorn.pid ]; then
+      kill "$(cat {{ app_dir }}/run/gunicorn.pid)" || true
+      rm -f {{ app_dir }}/run/gunicorn.pid
+    fi
+  changed_when: true

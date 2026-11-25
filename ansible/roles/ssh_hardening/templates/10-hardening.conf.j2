@@ -1,0 +1,9 @@
+# Géré par Ansible : ne pas modifier à la main
+PermitRootLogin no
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+PubkeyAuthentication yes
+X11Forwarding no
+MaxAuthTries 3
+LoginGraceTime 30
+AllowUsers {{ ssh_allowed_users | join(' ') }}
