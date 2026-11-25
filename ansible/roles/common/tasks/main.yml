@@ -8,7 +8,6 @@
       - curl
     state: present
     update_cache: true
-    cache_valid_time: 3600
 
 - name: Créer l'utilisateur système du service
   ansible.builtin.user:
