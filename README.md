@@ -27,6 +27,18 @@ L'application est volontairement minimale : l'infrastructure est le sujet.
 | Supervision | Prometheus collecte les 2 pods, dashboard Grafana provisionné par fichier |
 | Ansible | serveur configuré, application joignable ; connexion SSH root refusée (`Permission denied (publickey)`), utilisateur `deploy` accepté |
 
+## Captures
+
+**Autoscaling** : le CPU dépasse 300 % de l'objectif (60 %), le déploiement passe de 2 à 5 pods,
+puis revient à 2 après la fenêtre de stabilisation de 5 minutes.
+
+![Autoscaling](docs/img/autoscaling-hpa.png)
+
+**Supervision** : dashboard Grafana pendant le test de charge (pic de requêtes, pods supplémentaires
+visibles dans le temps de fonctionnement par pod).
+
+![Dashboard Grafana](docs/img/grafana-dashboard.png)
+
 ## Vue d'ensemble
 
 ```
