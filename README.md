@@ -25,7 +25,7 @@ L'application est volontairement minimale : l'infrastructure est le sujet.
 | Déploiement Kubernetes | 2 pods `Running`, rollout sans interruption |
 | Autoscaling | sous charge, CPU à 329 % de l'objectif : passage de 2 à 5 pods, puis retour à 2 après la fenêtre de stabilisation de 5 minutes |
 | Supervision | Prometheus collecte les 2 pods, dashboard Grafana provisionné par fichier |
-| Ansible | serveur configuré, application joignable ; connexion SSH root refusée (`Permission denied (publickey)`), utilisateur `deploy` accepté |
+| Ansible | serveur configuré, application joignable ; 2e exécution du playbook : toutes les tâches `ok`, aucune `changed` (idempotence) ; connexion SSH root refusée (`Permission denied (publickey)`), utilisateur `deploy` accepté |
 
 ## Captures
 
@@ -38,6 +38,10 @@ puis revient à 2 après la fenêtre de stabilisation de 5 minutes.
 visibles dans le temps de fonctionnement par pod).
 
 ![Dashboard Grafana](docs/img/grafana-dashboard.png)
+
+**Ansible** : deuxième exécution du playbook, toutes les tâches sont `ok` (rien à changer).
+
+![Ansible idempotent](docs/img/ansible-idempotence.png)
 
 ## Vue d'ensemble
 

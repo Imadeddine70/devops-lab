@@ -14,4 +14,5 @@
     name: appsvc
     system: true
     shell: /usr/sbin/nologin
-    create_home: false
+    home: /var/lib/appsvc     # Ansible y place ses fichiers temporaires
+    create_home: true
