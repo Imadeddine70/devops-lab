@@ -23,7 +23,7 @@ Chaque contrôle ci-dessous est **vérifiable** : la commande de test est indiqu
 kubectl -n devops-lab run intrus --image=busybox:1.36 --privileged -- sleep 3600
 ```
 
-Résultat attendu : une erreur `violates PodSecurity "restricted:latest"`. Le cluster bloque le pod avant
+Résultat observé : `Error from server (Forbidden): ... violates PodSecurity "restricted:latest"`, avec quatre motifs (privilégié, élévation de privilèges, capacités non retirées, root). Le cluster bloque le pod avant
 même qu'il démarre, ce qui prouve que le profil est réellement appliqué.
 
 ## Limites connues (à connaître pour un entretien)

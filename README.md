@@ -24,6 +24,7 @@ L'application est volontairement minimale : l'infrastructure est le sujet.
 | Pipeline Jenkins | lint, tests, build, scan Trivy de l'image (0 CRITICAL), scan des manifests, test de fumée, déploiement : tous verts |
 | Déploiement Kubernetes | 2 pods `Running`, rollout sans interruption |
 | Autoscaling | sous charge, CPU à 329 % de l'objectif : passage de 2 à 5 pods, puis retour à 2 après la fenêtre de stabilisation de 5 minutes |
+| Profil de sécurité des pods | un pod privilégié est refusé par le cluster (`violates PodSecurity "restricted:latest"` : privilégié, élévation de privilèges, capacités non retirées, root) |
 | Supervision | Prometheus collecte les 2 pods, dashboard Grafana provisionné par fichier |
 | Ansible | serveur configuré, application joignable ; 2e exécution du playbook : toutes les tâches `ok`, aucune `changed` (idempotence) ; connexion SSH root refusée (`Permission denied (publickey)`), utilisateur `deploy` accepté |
 
