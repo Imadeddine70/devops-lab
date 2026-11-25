@@ -17,4 +17,6 @@ kubectl -n devops-lab get pods
 curl http://localhost:8082/api/info
 ```
 
+Si la création échoue : `kind delete cluster --name devops-lab`, puis relancer.
+
 Suppression : `kind delete cluster --name devops-lab`
