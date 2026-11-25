@@ -6,15 +6,36 @@ L'application est volontairement minimale : l'infrastructure est le sujet.
 
 ## Avancement
 
-| Étape | Contenu | État |
+| Étape | Contenu | Dossier |
 |---|---|---|
-| 1 | Docker : image multi-stage, non-root, compose durci | fait |
-| 2 | Jenkins : pipeline CI (lint, tests, build, scan) | en cours |
-| 3 | Ansible : provisionnement reproductible | à venir |
-| 4 | Kubernetes (kind) : Deployment, Service, probes, HPA | à venir |
-| 5 | Déploiement continu Jenkins vers Kubernetes | à venir |
-| 6 | Prometheus et Grafana | à venir |
-| 7 | Durcissement : Trivy, NetworkPolicy, secrets | à venir |
+| 1 | Docker : image multi-stage, non-root, compose durci | `Dockerfile`, `compose.yml` |
+| 2 | Jenkins : pipeline CI (lint, tests, build, scan Trivy, test de fumée) | `Jenkinsfile`, `jenkins/` |
+| 3 | Ansible : provisionnement reproductible et durcissement SSH | `ansible/` |
+| 4 | Kubernetes (kind) : déploiement, probes, autoscaling, NetworkPolicy | `k8s/`, `kind/` |
+| 5 | Déploiement continu : Jenkins déploie sur Kubernetes | `Jenkinsfile` |
+| 6 | Supervision : Prometheus et Grafana | `monitoring/` |
+| 7 | Sécurité transverse et limites connues | `docs/SECURITY.md` |
+
+## Vue d'ensemble
+
+```
+git push -> Jenkins -> lint + tests -> build -> scan Trivy -> test de fumée
+                                                      |
+                                    import dans le cluster kind
+                                                      |
+                              kubectl apply -> Deployment (2 pods) -> Service
+                                                      |
+                              Prometheus (scrape /metrics) -> Grafana
+```
+
+## Ordre de mise en route
+
+1. **Docker** : `docker compose up --build -d` puis `curl http://localhost:8080/health`
+2. **Jenkins** : voir `jenkins/README.md`
+3. **Ansible** : voir `ansible/README.md`
+4. **Cluster** : voir `kind/README.md`
+5. **Déploiement par Jenkins** : voir `jenkins/README.md`
+6. **Supervision** : voir `monitoring/README.md`
 
 ## L'application
 
