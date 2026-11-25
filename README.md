@@ -16,6 +16,17 @@ L'application est volontairement minimale : l'infrastructure est le sujet.
 | 6 | Supervision : Prometheus et Grafana | `monitoring/` |
 | 7 | Sécurité transverse et limites connues | `docs/SECURITY.md` |
 
+## Résultats vérifiés
+
+| Test | Résultat |
+|---|---|
+| Image Docker | exécutée en uid 10001 (non-root), healthcheck OK |
+| Pipeline Jenkins | lint, tests, build, scan Trivy de l'image (0 CRITICAL), scan des manifests, test de fumée, déploiement : tous verts |
+| Déploiement Kubernetes | 2 pods `Running`, rollout sans interruption |
+| Autoscaling | sous charge, CPU à 329 % de l'objectif : passage de 2 à 5 pods, puis retour à 2 après la fenêtre de stabilisation de 5 minutes |
+| Supervision | Prometheus collecte les 2 pods, dashboard Grafana provisionné par fichier |
+| Ansible | serveur configuré, application joignable ; connexion SSH root refusée (`Permission denied (publickey)`), utilisateur `deploy` accepté |
+
 ## Vue d'ensemble
 
 ```
