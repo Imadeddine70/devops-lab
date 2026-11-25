@@ -1,0 +1,16 @@
+services:
+  web:
+    build: .
+    image: devops-lab:dev
+    ports:
+      - "8080:8080"
+    environment:
+      APP_VERSION: "0.1.0"
+      APP_ENV: "compose"
+    read_only: true            # système de fichiers en lecture seule
+    tmpfs:
+      - /tmp                   # gunicorn a besoin d'un /tmp inscriptible (en mémoire)
+    cap_drop: [ALL]            # aucune capacité Linux
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
