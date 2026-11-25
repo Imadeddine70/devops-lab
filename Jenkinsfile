@@ -100,8 +100,14 @@ pipeline {
             echo "Déployé : ${IMAGE} sur http://localhost:8082"
         }
         failure {
-            withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                sh 'kubectl -n ${K8S_NS} get pods || true'
+            script {
+                try {
+                    withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
+                        sh 'kubectl -n ${K8S_NS} get pods || true'
+                    }
+                } catch (err) {
+                    echo "Diagnostic Kubernetes indisponible : ${err.message}"
+                }
             }
         }
     }
