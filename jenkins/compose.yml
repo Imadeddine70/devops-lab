@@ -2,6 +2,7 @@ services:
   jenkins:
     build: .
     image: jenkins-lab:lts
+    container_name: jenkins-lab
     user: root                  # voir README : nécessaire pour accéder au socket Docker
     ports:
       - "8081:8080"

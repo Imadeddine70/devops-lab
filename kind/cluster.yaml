@@ -1,0 +1,13 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: devops-lab
+nodes:
+  - role: control-plane
+    extraPortMappings:
+      # port du PC -> NodePort du cluster
+      - containerPort: 30080   # application
+        hostPort: 8082
+      - containerPort: 30030   # Grafana
+        hostPort: 3000
+      - containerPort: 30090   # Prometheus
+        hostPort: 9090
